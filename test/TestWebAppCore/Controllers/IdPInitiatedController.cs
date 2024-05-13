@@ -18,19 +18,20 @@ namespace TestWebAppCore.Controllers
     {
         public IActionResult Initiate()
         {
-            var serviceProviderRealm = "https://some-domain.com/some-service-provider";
+            var serviceProviderRealm = "https://samlmock.dev/";
 
             var binding = new Saml2PostBinding();
-            binding.RelayState = $"RPID={Uri.EscapeDataString(serviceProviderRealm)}";
+            // binding.RelayState = $"RPID={Uri.EscapeDataString(serviceProviderRealm)}";
 
             var config = new Saml2Configuration();
 
-            config.Issuer = "http://some-domain.com/this-application";
-            config.SingleSignOnDestination = new Uri("https://test-adfs.itfoxtec.com/adfs/ls/");
-            config.SigningCertificate = CertificateUtil.Load(Startup.AppEnvironment.MapToPhysicalFilePath("itfoxtec.identity.saml2.testwebappcore_Certificate.pfx"), "!QAZ2wsx");
-            config.SignatureAlgorithm = Saml2SecurityAlgorithms.RsaSha256Signature;
-
-            var appliesToAddress = "https://test-adfs.itfoxtec.com/adfs/services/trust";
+            config.Issuer = "https://samlmock.dev/";
+            config.SingleSignOnDestination = new Uri("https://samlmock.dev/idp?aud=urn:saml-mock-demo&acs_url=http://localhost:5000/Auth/AssertionConsumerService");
+            config.SingleLogoutDestination = new Uri("https://samlmock.dev/idp_logout?callback_url=http://localhost:5000/Logout");
+            // config.SigningCertificate = CertificateUtil.Load(Startup.AppEnvironment.MapToPhysicalFilePath("itfoxtec.identity.saml2.testwebappcore_Certificate.pfx"), "!QAZ2wsx");
+            // config.SignatureAlgorithm = Saml2SecurityAlgorithms.RsaSha256Signature;
+            // config.SignatureValidationCertificate = CertificateUtil.Load(Startup.AppEnvironment.MapToPhysicalFilePath("itfoxtec.identity.saml2.testwebappcore_Certificate.cer"));
+            var appliesToAddress = "https://samlmock.dev";
 
             var response = new Saml2AuthnResponse(config);
             response.Status = Saml2StatusCodes.Success;    

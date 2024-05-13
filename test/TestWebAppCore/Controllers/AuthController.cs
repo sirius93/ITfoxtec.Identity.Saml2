@@ -29,6 +29,17 @@ namespace TestWebAppCore.Controllers
         {
             var binding = new Saml2RedirectBinding();
             binding.SetRelayStateQuery(new Dictionary<string, string> { { relayStateReturnUrl, returnUrl ?? Url.Content("~/") } });
+            // binding.RelayState = $"RPID={Uri.EscapeDataString(serviceProviderRealm)}";
+
+            // var config = new Saml2Configuration();
+
+            config.Issuer = "https://samlmock.dev/";
+            config.SingleSignOnDestination = new Uri("https://samlmock.dev/idp?aud=urn:saml-mock-demo&acs_url=http://localhost:5000/Auth/AssertionConsumerService");
+            config.SingleLogoutDestination = new Uri("https://samlmock.dev/idp_logout?callback_url=http://localhost:5000/Logout");
+            // config.SigningCertificate = CertificateUtil.Load(Startup.AppEnvironment.MapToPhysicalFilePath("itfoxtec.identity.saml2.testwebappcore_Certificate.pfx"), "!QAZ2wsx");
+            // config.SignatureAlgorithm = Saml2SecurityAlgorithms.RsaSha256Signature;
+            // config.SignatureValidationCertificate = CertificateUtil.Load(Startup.AppEnvironment.MapToPhysicalFilePath("itfoxtec.identity.saml2.testwebappcore_Certificate.cer"));
+            var appliesToAddress = "https://samlmock.dev";
 
             return binding.Bind(new Saml2AuthnRequest(config)
             {
